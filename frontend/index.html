@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<!-- THIS IS THE LOGIN PAGE!!!!!!! - emil -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weldo System | Welcome!</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .navBar {
+            height: 3.5rem;
+            border: 0.0625rem solid black;
+        }
+        .mainBody {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            border: 0.0625rem solid black;
+        }
+        .footer { 
+            height:3rem; 
+            border: 0.0625rem solid black; 
+        }
+        .mainFrame {
+            padding: 0.5rem 2rem 2rem 2rem;
+            width: 100%;
+            max-width: 24rem;
+            height: 100%;
+            max-height: 24rem;
+            border: 0.0625rem solid black;
+        }
+        .mainFrame h1{
+            text-align: center;
+            font-size: 1rem;
+        }
+        .loginForm{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .formGroup{
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .formGroup input{
+            width: 100%;
+            padding: 1rem;
+            outline: none;
+            border-radius: 1rem;
+            border: 0.05rem solid rgb(145, 145, 145);
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class ="navBar"></div>
+    <div class = "mainBody">
+        <!-- Main LogIn Frame -->
+        <div class = "mainFrame">
+            <div class = "Title">
+                <h1>Welcome to ERMS!</h1>
+            </div>
+            <!-- login form n -->
+            <div class ="loginForm">
+                <div class="formGroup">
+                    <label>StudentID:</label>
+                    <input type="number" placeholder="e.g 2025...">
+                </div>
+                <div class="formGroup">
+                    <label>Password:</label>
+                    <input type="password" placeholder="e.g 2025...">
+                </div>
+                <button>login</button>
+            </div>
+        </div>
+
+
+    </div>
+    <div class = "footer"></div>
+</body>
+</html>
