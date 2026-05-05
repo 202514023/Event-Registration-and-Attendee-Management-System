@@ -267,7 +267,7 @@
             color: var(--danger);
         }
 
-        /* ── FOOTER ── */
+
         .footer {
             height: 3rem;
             border-top: 0.0625rem solid var(--border);
@@ -281,7 +281,7 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
+
     <nav class="navbar">
         <div class="navbar-brand">ERMS</div>
         <div class="navbar-right">
@@ -290,7 +290,6 @@
         </div>
     </nav>
 
-    <!-- MAIN -->
     <main class="main">
 
         <div class="page-header">
@@ -301,7 +300,7 @@
             <a href="/events/new" class="btn-add">+ Add Event</a>
         </div>
 
-        <!-- STATS -->
+
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-label">Total Events</div>
@@ -321,10 +320,9 @@
             </div>
         </div>
 
-        <!-- EVENT CARDS -->
+ 
         <div class="event-grid">
 
-            <!-- Thymeleaf loop - renders one card per event from DB -->
             <div class="event-card" th:each="event : ${events}">
                 <div class="event-cover">
                     <div class="event-cover-placeholder">📅</div>
@@ -341,7 +339,7 @@
                 </div>
             </div>
 
-            <!-- Hardcoded sample cards (remove when DB is connected) -->
+            <!-- template para sa db-->
             <div class="event-card">
                 <div class="event-cover">
                     <img src="https://i.redd.it/j4dguhnf5rte1.jpeg" alt="Intramurals">
@@ -375,7 +373,6 @@
         </div>
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
         ERMS &mdash; Event Registration &amp; Management System
     </footer>
