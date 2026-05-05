@@ -93,17 +93,19 @@
                 <h1>Welcome to ERMS!</h1>
             </div>
             <!-- login form n -->
-            <div class ="loginForm">
-                <div class="formGroup">
-                    <label>StudentID:</label>
-                    <input type="text" placeholder="e.g 2025...">
+            <form action="/login" method="post">
+                <div class ="loginForm">
+                    <div class="formGroup">
+                        <label>StudentID:</label>
+                        <input type="text" name="username" placeholder="e.g 2025...">
+                    </div>
+                    <div class="formGroup">
+                        <label>Password:</label>
+                        <input type="password" name="password" placeholder="e.g @miss kona si Cashew123">
+                    </div>
+                    <button type="submit">Login</button>
                 </div>
-                <div class="formGroup">
-                    <label>Password:</label>
-                    <input type="password" placeholder="e.g @miss kona si Cashew123">
-                </div>
-                <button>Login</button>
-            </div>
+            </form>
         </div>
 
 
