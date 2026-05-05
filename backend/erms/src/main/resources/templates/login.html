@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <!-- THIS IS THE LOGIN PAGE!!!!!!! - emil -->
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weldo System | Welcome!</title>
+    <title>ERMS | Welcome!</title>
 
     <style>
+        :root {
+            --bg: #f5f4f0;
+            --surface: #ffffff;
+            --border: #e2e0d8;
+            --text: #1a1a18;
+            --muted: #8a8880;
+            --accent: #2d5a3d;
+            --accent-hover: #224d32;
+            --danger: #c0392b;
+            --radius: 0.75rem;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -17,50 +29,78 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: sans-serif;
         }
+
         .navBar {
             height: 3.5rem;
-            border: 0.0625rem solid black;
+            background: var(--surface);
+            border-bottom: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            padding: 0 1.5rem;
         }
+
+        .navBar h2 {
+            font-size: 1rem;
+            color: var(--accent);
+        }
+
         .mainBody {
             display: flex;
             justify-content: center;
             align-items: center;
             flex: 1;
-            border: 0.0625rem solid black;
         }
-        .footer { 
-            height:3rem; 
-            border: 0.0625rem solid black; 
-        }
+
         .mainFrame {
+            background: var(--surface);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
             padding: 0.5rem 2rem 2rem 2rem;
             width: 100%;
             max-width: 24rem;
-            border: 0.0625rem solid black;
         }
-        .mainFrame h1{
+
+        .mainFrame h1 {
             padding: 1.4rem;
             text-align: center;
             font-size: 2rem;
+            color: var(--text);
         }
-        .loginForm{
+
+        .loginForm {
             display: flex;
             flex-direction: column;
             gap: 1rem;
         }
-        .formGroup{
+
+        .formGroup {
             display: flex;
             flex-direction: column;
             gap: 0.30rem;
         }
 
-        .formGroup input{
+        .formGroup label {
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        .formGroup input {
             width: 100%;
             padding: 1rem;
             outline: none;
-            border-radius: 1rem;
-            border: 0.05rem solid rgb(145, 145, 145);
+            border-radius: var(--radius);
+            border: 0.0625rem solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .formGroup input:focus {
+            border-color: var(--accent);
         }
 
         .loginForm button {
@@ -68,48 +108,63 @@
             padding: 0.67rem;
             font-size: 1rem;
             border: none;
-            border-radius: 1rem;
+            border-radius: var(--radius);
             cursor: pointer;
-            background-color: #4f46e5;
+            background-color: var(--accent);
             color: white;
         }
 
-        .loginForm button:hover{
-            background-color: #6962f1;
-
+        .loginForm button:hover {
+            background-color: var(--accent-hover);
         }
 
+        .errorMsg {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--danger);
+            min-height: 1.25rem;
+        }
 
-
-
+        .footer {
+            height: 3rem;
+            border-top: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
     </style>
 </head>
 <body>
-    <div class ="navBar"></div>
-    <div class = "mainBody">
-        <!-- Main LogIn Frame -->
-        <div class = "mainFrame">
-            <div class = "Title">
-                <h1>Welcome to ERMS!</h1>
-            </div>
-            <!-- login form n -->
+
+    <div class="navBar">
+        <h2>ERMS</h2>
+    </div>
+
+    <div class="mainBody">
+        <div class="mainFrame">
+            <h1>Welcome to ERMS!</h1>
             <form action="/login" method="post">
-                <div class ="loginForm">
+                <div class="loginForm">
                     <div class="formGroup">
-                        <label>StudentID:</label>
+                        <label>Username</label>
                         <input type="text" name="username" placeholder="e.g 2025...">
                     </div>
                     <div class="formGroup">
-                        <label>Password:</label>
-                        <input type="password" name="password" placeholder="e.g @miss kona si Cashew123">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter password">
                     </div>
+                    <p class="errorMsg" th:text="${error}"></p>
                     <button type="submit">Login</button>
                 </div>
             </form>
         </div>
-
-
     </div>
-    <div class = "footer"></div>
+
+    <div class="footer">
+        ERMS &mdash; Event Registration &amp; Management System
+    </div>
+
 </body>
 </html>

@@ -2,10 +2,383 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>ERMS | Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERMS | Admin Dashboard</title>
+    <style>
+        /*basically parent class to ng mga design*/
+        :root {
+            --bg: #f5f4f0;
+            --surface: #ffffff;
+            --border: #e2e0d8;
+            --text: #1a1a18;
+            --muted: #8a8880;
+            --accent: #2d5a3d;
+            --accent-light: #e8f0eb;
+            --danger: #c0392b;
+            --danger-light: #fdf0ee;
+            --shadow: 0 0.125rem 0.75rem rgba(0,0,0,0.07);
+            --radius: 0.75rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            height: 3.75rem;
+            background: var(--surface);
+            border-bottom: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-brand {
+            font-size: 1.25rem;
+            color: var(--accent);
+            letter-spacing: -0.01em;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .navbar-user {
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        .navbar-user span {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .btn-logout {
+            
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--danger);
+            background: var(--danger-light);
+            border: none;
+            padding: 0.4rem 0.875rem;
+            border-radius: 2rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-logout:hover { background: #f5d5d2; }
+
+        .main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 75rem;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 400;
+            color: var(--text);
+        }
+
+        .page-header p {
+            font-size: 0.875rem;
+            color: var(--muted);
+            margin-top: 0.2rem;
+        }
+
+        .btn-add {
+            
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #fff;
+            background: var(--accent);
+            border: none;
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            text-decoration: none;
+            transition: opacity 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-add:hover { opacity: 0.88; }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.25rem 1.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            color: var(--text);
+            margin-top: 0.25rem;
+            line-height: 1;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+            gap: 1.25rem;
+        }
+
+        .event-card {
+            background: var(--surface);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            transform: translateY(-0.2rem);
+            box-shadow: var(--shadow);
+        }
+
+        .event-cover {
+            height: 8rem;
+            background: var(--accent-light);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .event-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .event-cover-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .event-info {
+            padding: 0.875rem 1rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .event-name {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .event-date {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .event-slots {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 500;
+            margin-top: 0.25rem;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.625rem 1rem;
+            border-top: 0.0625rem solid var(--border);
+        }
+
+        .btn-sm {
+            
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 0.3rem 0.625rem;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-sm:hover { opacity: 0.8; }
+
+        .btn-view {
+            background: var(--accent-light);
+            color: var(--accent);
+            flex: 1;
+        }
+
+        .btn-edit {
+            background: #f0f0f0;
+            color: var(--text);
+        }
+
+        .btn-delete {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            height: 3rem;
+            border-top: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome, <span th:text="${session.username}"></span>!</h1>
-    <a href="/logout">Logout</a>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-brand">ERMS</div>
+        <div class="navbar-right">
+            <p class="navbar-user">Welcome, <span th:text="${session.admin}">Admin</span></p>
+            <a href="/logout" class="btn-logout">Logout</a>
+        </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <div class="page-header">
+            <div>
+                <h1>Events</h1>
+                <p>Manages all the shi hahahasodhnsa</p>
+            </div>
+            <a href="/events/new" class="btn-add">+ Add Event</a>
+        </div>
+
+        <!-- STATS -->
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Total Events</div>
+                <div class="stat-value" th:text="${totalEvents}">3</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Registrations</div>
+                <div class="stat-value" th:text="${totalRegistrations}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Present Today</div>
+                <div class="stat-value" th:text="${totalPresent}">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Upcoming</div>
+                <div class="stat-value" th:text="${upcomingEvents}">2</div>
+            </div>
+        </div>
+
+        <!-- EVENT CARDS -->
+        <div class="event-grid">
+
+            <!-- Thymeleaf loop - renders one card per event from DB -->
+            <div class="event-card" th:each="event : ${events}">
+                <div class="event-cover">
+                    <div class="event-cover-placeholder">📅</div>
+                </div>
+                <div class="event-info">
+                    <div class="event-name" th:text="${event.eventName}">Event Name</div>
+                    <div class="event-date" th:text="${event.eventDate}">Jan 1, 2025</div>
+                    <div class="event-slots" th:text="${event.maxSlots - event.currentSlots} + ' slots left'">50 slots left</div>
+                </div>
+                <div class="event-actions">
+                    <button class="btn-sm btn-view">View</button>
+                    <button class="btn-sm btn-edit">Edit</button>
+                    <button class="btn-sm btn-delete">Delete</button>
+                </div>
+            </div>
+
+            <!-- Hardcoded sample cards (remove when DB is connected) -->
+            <div class="event-card">
+                <div class="event-cover">
+                    <img src="https://i.redd.it/j4dguhnf5rte1.jpeg" alt="Intramurals">
+                </div>
+                <div class="event-info">
+                    <div class="event-name">Intramurals 2025</div>
+                    <div class="event-date">August 15, 2025</div>
+                    <div class="event-slots">200 slots left</div>
+                </div>
+                <div class="event-actions">
+                    <button class="btn-sm btn-view">View</button>
+                    <button class="btn-sm btn-edit">Edit</button>
+                    <button class="btn-sm btn-delete">Delete</button>
+                </div>
+            </div>
+
+            <div class="event-card">
+                <div class="event-cover event-cover-placeholder" style="background:#f0e8f5; font-size:2.5rem; display:flex; align-items:center; justify-content:center;">🎉</div>
+                <div class="event-info">
+                    <div class="event-name">JS Prom Night</div>
+                    <div class="event-date">September 20, 2025</div>
+                    <div class="event-slots">150 slots left</div>
+                </div>
+                <div class="event-actions">
+                    <button class="btn-sm btn-view">View</button>
+                    <button class="btn-sm btn-edit">Edit</button>
+                    <button class="btn-sm btn-delete">Delete</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        ERMS &mdash; Event Registration &amp; Management System
+    </footer>
+
 </body>
 </html>
