@@ -1,5 +1,7 @@
 package com.weldo.erms.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.weldo.erms.model.Admin;
 import com.weldo.erms.repository.AdminRepository;
+import com.weldo.erms.repository.EventRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -18,22 +21,16 @@ public class AuthController {
     @Autowired
     private AdminRepository adminRepository;
 
+    @Autowired
+    private EventRepository eventRepository;
+
     // SHOW LOGIN PAGE
     @GetMapping("/")
     public String loginPage() {
         return "login";
     }
 
-    // SHOW DASHBOARDDDDDDDD
-    @GetMapping("/dashboard")
-    public String dashboard(HttpSession session, Model model) {
-        if (session.getAttribute("admin") == null) {
-            return "redirect:/";  
-        }
-        return "dashboard";
-}
-
-    // HANDLE LOGIN FORM SUBMIT
+    // HANDLE LOGIN
     @PostMapping("/login")
     public String login(@RequestParam String username,
                         @RequestParam String password,
@@ -46,9 +43,25 @@ public class AuthController {
             session.setAttribute("admin", admin.getFullName());
             return "redirect:/dashboard";
         } else {
-            model.addAttribute("error");
+            model.addAttribute("error", "Spy ka ata boi!");
             return "login";
         }
+    }
+
+    // SHOW DASHBOARD
+    @GetMapping("/dashboard")
+    public String dashboard(HttpSession session, Model model) {
+        if (session.getAttribute("admin") == null) {
+            return "redirect:/";
+        }
+
+        String today = LocalDate.now().toString();
+
+        model.addAttribute("events", eventRepository.findAll());
+        model.addAttribute("totalEvents", eventRepository.count());
+        model.addAttribute("upcomingEvents", eventRepository.countByEventDateGreaterThanEqual(today));
+
+        return "dashboard";
     }
 
     // LOGOUT
