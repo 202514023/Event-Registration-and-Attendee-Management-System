@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.weldo.erms.model.Admin;
 import com.weldo.erms.repository.AdminRepository;
 import com.weldo.erms.repository.EventRepository;
+import com.weldo.erms.repository.RegistrationRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -23,6 +24,9 @@ public class AuthController {
 
     @Autowired
     private EventRepository eventRepository;
+
+    @Autowired
+    private RegistrationRepository registrationRepository;
 
     // SHOW LOGIN PAGE
     @GetMapping("/")
@@ -60,6 +64,9 @@ public class AuthController {
         model.addAttribute("events", eventRepository.findAll());
         model.addAttribute("totalEvents", eventRepository.count());
         model.addAttribute("upcomingEvents", eventRepository.countByEventDateGreaterThanEqual(today));
+
+        model.addAttribute("totalRegistrations", registrationRepository.count());
+        model.addAttribute("totalPresent", registrationRepository.countByAttendanceStatus("Present"));
 
         return "dashboard";
     }
