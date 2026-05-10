@@ -135,6 +135,9 @@
             cursor: pointer;
             background: white;
             color: var(--text);
+            display: block;
+            text-align: center;
+            text-decoration: none;
         }
 
         .btnCancel:hover { background-color: var(--bg); }
@@ -167,7 +170,7 @@
                 </div>
                 <div class="formGroup">
                     <label>Description</label>
-                    <textarea name="description" placeholder="Whats happening "></textarea>
+                    <textarea name="description" placeholder="What up!"></textarea>
                 </div>
                 <div class="formGroup">
                     <label>Event Date</label>
@@ -183,8 +186,9 @@
                 </div>
                 <div class="formActions">
                     <button type="submit" class="btnSubmit">Add Event</button>
-                    <button type="button" class="btnCancel" 
-                    onclick="location.href='/dashboard'">Cancel</button>
+                    <!-- <button type="button" class="btnCancel" 
+                    onclick="location.href='/dashboard'">Cancel</button> this shi not working ima use anchor-->
+                    <a href="/dashboard" class="btnCancel">Cancel</a>
                     
                 </div>
             </form>
@@ -192,7 +196,7 @@
     </div>
 
     <div class="footer">
-        ERMS &mdash; Event Registration &amp; Management System
+        Weldo Fanclub &mdash; Event Registration &amp; Management System
     </div>
 
 </body>

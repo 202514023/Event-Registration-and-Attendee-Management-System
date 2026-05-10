@@ -247,6 +247,9 @@
             border: none;
             cursor: pointer;
             transition: opacity 0.2s;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
         }
 
         .btn-sm:hover { opacity: 0.8; }
@@ -295,7 +298,7 @@
         <div class="page-header">
             <div>
                 <h1>Events</h1>
-                <p>Manages all the shi hahahasodhnsa</p>
+                <p>Manages Events dahil pogi si Emilio</p>
             </div>
             <a href="/events/new" class="btn-add">+ Add Event</a>
         </div>
@@ -333,14 +336,17 @@
                     <div class="event-name" th:text="${event.eventName}">Event Name</div>
                     <div class="event-date" th:text="${event.eventDate}">Jan 1, 2025</div>
                     <div class="event-slots" th:text="${event.maxSlots - event.currentSlots} + ' slots left'">50 slots left</div>
-                </div>
                 <div class="event-actions">
-                <button class="btn-sm btn-view" 
-                    th:onclick="'location.href=/events/' + ${event.eventId}">View</button>
-                <button class="btn-sm btn-edit" 
-                    th:onclick="'location.href=/events/edit/' + ${event.eventId}">Edit</button>
-                <button class="btn-sm btn-delete" 
-                    th:onclick="'location.href=/events/delete/' + ${event.eventId}">Delete</button>
+                    <!-- <button class="btn-sm btn-view" 
+                        th:onclick="|location.href='/events/' + ${event.eventId}|">View</button>
+                    <button class="btn-sm btn-edit" 
+                        th:onclick="|location.href='/events/edit/' + ${event.eventId}|">Edit</button> -->
+                    <!-- <button class="btn-sm btn-delete" 
+                        th:onclick="|location.href='/events/delete/' + ${event.eventId}|">Delete</button> 
+                        buggy ung button class, kingina ng bwct nato mag anchor nalang ako-->
+                        <a class="btn-sm btn-view" th:href="@{/events/{id}(id=${event.eventId})}">View</a>
+                        <a class="btn-sm btn-edit" th:href="@{/events/edit/{id}(id=${event.eventId})}">Edit</a>
+                        <a class="btn-sm btn-delete" th:href="@{/events/delete/{id}(id=${event.eventId})}">Delete</a>
                 </div>
             </div>
 
@@ -379,7 +385,7 @@
     </main>
 
     <footer class="footer">
-        ERMS &mdash; Event Registration &amp; Management System
+        Weldo Fanclub &mdash; Event Registration &amp; Management System
     </footer>
 
 </body>
