@@ -44,7 +44,9 @@ public class AuthController {
         Admin admin = adminRepository.findByUsernameAndPassword(username, password);
 
         if (admin != null) {
-            session.setAttribute("admin", admin.getFullName());
+            System.out.println("DEBUG: Logging in admin with ID: " + admin.getUserId());
+            session.setAttribute("admin", admin.getFullName()); /// this stores the name and displays
+            session.setAttribute("adminId", admin.getUserId()); /// this stores the adminId for creation
             return "redirect:/dashboard";
         } else {
             model.addAttribute("error", "Spy ka ata boi!");

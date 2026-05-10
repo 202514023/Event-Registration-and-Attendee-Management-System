@@ -8,18 +8,18 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "tbl_admin")
+@Table(name = "tbl_admin") /// kung anong table gagamitin
 public class Admin {
-    @Id
+    @Id /// primary key /// Select * from JPA.. 
     @GeneratedValue(strategy= GenerationType.IDENTITY)
 
-    @Column(name="user_id")
+    @Column(name="user_id") ///etong column nato.. eto ung column sa table, kukunin nya ung mga data user_id
     private int userId;
 
-    @Column(name="username")
+    @Column(name="username") // username
     private String username;
 
-    @Column(name="password")
+    @Column(name="password") /// statement-> select * from where// wala nang ganyan
     private String password;
 
     @Column(name = "first_name")
@@ -29,7 +29,7 @@ public class Admin {
     private String lastName;
 
     public int getUserId() { 
-        return userId; 
+        return userId; /// someone.userid(); 1; -> 
         }
     public String getUsername() { 
         return username; 

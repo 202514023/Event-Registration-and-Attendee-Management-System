@@ -285,7 +285,7 @@
     <nav class="navbar">
         <div class="navbar-brand">ERMS</div>
         <div class="navbar-right">
-            <p class="navbar-user">Welcome, <span th:text="${session.admin}">Admin</span></p>
+            <p class="navbar-user">Welcome, <span th:text="${session.admin}">PlaceHolder</span></p>
             <a href="/logout" class="btn-logout">Logout</a>
         </div>
     </nav>
@@ -321,6 +321,8 @@
         </div>
 
  
+
+        <!-- EVENT CARDS -->
         <div class="event-grid">
 
             <div class="event-card" th:each="event : ${events}">
@@ -333,9 +335,12 @@
                     <div class="event-slots" th:text="${event.maxSlots - event.currentSlots} + ' slots left'">50 slots left</div>
                 </div>
                 <div class="event-actions">
-                    <button class="btn-sm btn-view">View</button>
-                    <button class="btn-sm btn-edit">Edit</button>
-                    <button class="btn-sm btn-delete">Delete</button>
+                <button class="btn-sm btn-view" 
+                    th:onclick="'location.href=/events/' + ${event.eventId}">View</button>
+                <button class="btn-sm btn-edit" 
+                    th:onclick="'location.href=/events/edit/' + ${event.eventId}">Edit</button>
+                <button class="btn-sm btn-delete" 
+                    th:onclick="'location.href=/events/delete/' + ${event.eventId}">Delete</button>
                 </div>
             </div>
 
