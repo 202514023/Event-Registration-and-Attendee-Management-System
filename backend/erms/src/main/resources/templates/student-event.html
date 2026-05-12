@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERMS | Event Details</title>
+    <style>
+        :root {
+            --bg: #f5f4f0;
+            --surface: #ffffff;
+            --border: #e2e0d8;
+            --text: #1a1a18;
+            --muted: #8a8880;
+            --accent: #2d5a3d;
+            --accent-hover: #224d32;
+            --accent-light: #e8f0eb;
+            --danger: #c0392b;
+            --danger-light: #fdf0ee;
+            --radius: 0.75rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+            color: var(--text);
+            font-family: sans-serif;
+        }
+
+        .navbar {
+            height: 3.5rem;
+            background: var(--surface);
+            border-bottom: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            position: sticky;
+            top: 0;
+        }
+
+        .navbar h2 { font-size: 1rem; color: var(--accent); }
+        .navbar a { font-size: 0.875rem; color: var(--muted); text-decoration: none; }
+        .navbar a:hover { color: var(--text); }
+
+        .main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 50rem;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .eventCard {
+            background: var(--surface);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .eventCard h1 { font-size: 1.75rem; margin-bottom: 1rem; }
+
+        .eventMeta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .metaItem { display: flex; flex-direction: column; gap: 0.2rem; }
+        .metaLabel { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+        .metaValue { font-size: 0.9rem; font-weight: 500; }
+        .slotsValue { color: var(--accent); }
+
+        .description {
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 0.0625rem solid var(--border);
+        }
+
+        .registerSection {
+            background: var(--surface);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+        }
+
+        .registerSection h2 { font-size: 1.1rem; margin-bottom: 1rem; }
+
+        .successMsg {
+            background: var(--accent-light);
+            color: var(--accent);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .errorMsg {
+            background: var(--danger-light);
+            color: var(--danger);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .btnRegister {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            background: var(--accent);
+            color: white;
+        }
+
+        .btnRegister:hover { background: var(--accent-hover); }
+
+        .btnFull {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: var(--radius);
+            background: #f0f0f0;
+            color: var(--muted);
+            cursor: not-allowed;
+        }
+
+        .footer {
+            height: 3rem;
+            border-top: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+    .btnUnregister {
+        display: block;
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: 0.0625rem solid var(--danger);
+        border-radius: var(--radius);
+        cursor: pointer;
+        background: var(--danger-light);
+        color: var(--danger);
+        text-align: center;
+        text-decoration: none;
+        margin-top: 0.5rem;
+    }
+
+    .btnUnregister:hover { 
+        background: #f5d5d2; 
+    }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>ERMS</h2>
+        <a href="/student/dashboard">← Back to Events</a>
+    </div>
+
+    <div class="main">
+
+        <!-- EVENT DETAILS -->
+        <div class="eventCard">
+            <h1 th:text="${event.eventName}">Event Name</h1>
+            <div class="eventMeta">
+                <div class="metaItem">
+                    <span class="metaLabel">Date</span>
+                    <span class="metaValue" th:text="${event.eventDate}">Jan 1, 2025</span>
+                </div>
+                <div class="metaItem">
+                    <span class="metaLabel">Location</span>
+                    <span class="metaValue" th:text="${event.location}">Location</span>
+                </div>
+                <div class="metaItem">
+                    <span class="metaLabel">Available Slots</span>
+                    <span class="metaValue slotsValue"
+                        th:text="${event.maxSlots - event.currentSlots} + ' / ' + ${event.maxSlots}">
+                        0 / 100</span>
+                </div>
+            </div>
+            <div class="description" th:text="${event.description}">Description</div>
+        </div>
+
+        <!-- REGISTER SECTION -->
+        <div class="registerSection">
+            <h2>Register for this Event</h2>
+
+            <div class="successMsg" th:if="${success}" th:text="${success}"></div>
+            <div class="errorMsg" th:if="${error}" th:text="${error}"></div>
+
+            <!-- show register button if slots available -->
+    <!-- REGISTER SECTION -->
+    <div class="registerSection">
+        <h2>Registration</h2>
+
+    <div class="successMsg" th:if="${success}" th:text="${success}"></div>
+    <div class="errorMsg" th:if="${error}" th:text="${error}"></div>
+
+    <!-- already registered -->
+    <div th:if="${alreadyRegistered}">
+        <div class="successMsg">You are registered for this event!</div>
+        <a th:href="@{/student/events/{id}/unregister(id=${event.eventId})}" 
+           class="btnUnregister">Unregister</a>
+    </div>
+
+    <!-- not registered yet -->
+    <div th:if="${!alreadyRegistered}">
+        <!-- slots available -->
+        <form th:action="@{/student/events/{id}/register(id=${event.eventId})}" 
+              method="post"
+              th:if="${event.currentSlots < event.maxSlots}">
+            <button type="submit" class="btnRegister">Register Now</button>
+        </form>
+
+        <!-- event full -->
+        <button class="btnFull" disabled 
+                th:if="${event.currentSlots >= event.maxSlots}">
+            Event is Full
+        </button>
+    </div>
+        </div>
+
+            <!-- show disabled button if full -->
+            <button class="btnFull" disabled 
+                    th:if="${event.currentSlots >= event.maxSlots}">
+                Event is Full
+            </button>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Weldo Fanclub &mdash; Event Registration &amp; Management System
+    </div>
+
+</body>
+</html>

@@ -344,7 +344,12 @@
                                     th:href="@{/registrations/attend/{id}/Absent(id=${reg.registrationId})}">Absent</a>
                                 <a class="btnAttend btnLate"    
                                     th:href="@{/registrations/attend/{id}/Late(id=${reg.registrationId})}">Late</a>
+                                <a class="btnAttend" 
+                                    style="background: var(--danger-light); color: var(--danger);"
+                                    th:href="@{/registrations/delete/{id}/{eventId}(id=${reg.registrationId}, eventId=${event.eventId})}">Delete</a>
                             </div>
+            
+                        
                         </td>
                     </tr>
                 </tbody>

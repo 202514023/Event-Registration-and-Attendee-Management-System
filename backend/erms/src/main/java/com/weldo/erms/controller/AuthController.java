@@ -13,6 +13,8 @@ import com.weldo.erms.model.Admin;
 import com.weldo.erms.repository.AdminRepository;
 import com.weldo.erms.repository.EventRepository;
 import com.weldo.erms.repository.RegistrationRepository;
+import com.weldo.erms.model.Student;
+import com.weldo.erms.repository.StudentRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -28,6 +30,9 @@ public class AuthController {
     @Autowired
     private RegistrationRepository registrationRepository;
 
+    @Autowired
+    private StudentRepository studentRepository;
+
     // SHOW LOGIN PAGE
     @GetMapping("/")
     public String loginPage() {
@@ -41,18 +46,30 @@ public class AuthController {
                         HttpSession session,
                         Model model) {
 
-        Admin admin = adminRepository.findByUsernameAndPassword(username, password);
-
-        if (admin != null) {
-            System.out.println("checks for id sicne ayaw gumana: " + admin.getUserId());
-            session.setAttribute("admin", admin.getFullName()); /// this stores the name and displays
-            session.setAttribute("adminId", admin.getUserId()); /// this stores the adminId for creation
-            return "redirect:/dashboard";
-        } else {
-            model.addAttribute("error", "Spy ka ata boi!");
-            return "login";
-        }
+    // CHECK ADMIN FIRST
+    Admin admin = adminRepository.findByUsernameAndPassword(username, password);
+    if (admin != null) {
+        session.setAttribute("admin", admin.getFullName());
+        session.setAttribute("adminId", admin.getUserId());
+        return "redirect:/dashboard";
     }
+
+    // CHECK STUDENT NEXT
+    Student student = studentRepository.findByStudentNumberAndPassword(username, password);
+    if (student != null) {
+    session.setAttribute("student", student.getFullName());
+    session.setAttribute("studentId", student.getId());
+    session.setAttribute("studentFirstName", student.getFirstName());
+    session.setAttribute("studentLastName", student.getLastName());
+    session.setAttribute("studentEmail", student.getEmail());
+    session.setAttribute("studentNumber", student.getStudentNumber());
+    return "redirect:/student/dashboard";
+}
+
+    // NEITHER FOUND
+    model.addAttribute("error", "Spy ka ata boi!");
+    return "login";
+}
 
     // SHOW DASHBOARD
     @GetMapping("/dashboard")
