@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERMS | View Event</title>
+    <style>
+        :root {
+            --bg: #f5f4f0;
+            --surface: #ffffff;
+            --border: #e2e0d8;
+            --text: #1a1a18;
+            --muted: #8a8880;
+            --accent: #2d5a3d;
+            --accent-light: #e8f0eb;
+            --danger: #c0392b;
+            --danger-light: #fdf0ee;
+            --radius: 0.75rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+            color: var(--text);
+            font-family: sans-serif;
+        }
+
+        .navbar {
+            height: 3.5rem;
+            background: var(--surface);
+            border-bottom: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            position: sticky;
+            top: 0;
+        }
+
+        .navbar h2 { font-size: 1rem; color: var(--accent); }
+
+        .navbar a {
+            font-size: 0.875rem;
+            color: var(--muted);
+            text-decoration: none;
+        }
+
+        .navbar a:hover { color: var(--text); }
+
+        .main {
+            flex: 1;
+            padding: 2rem;
+            max-width: 75rem;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* ── EVENT DETAILS CARD ── */
+        .eventDetails {
+            background: var(--surface);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .eventDetails h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .eventMeta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .metaItem {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .metaLabel {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .metaValue {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .slotsValue {
+            color: var(--accent);
+        }
+
+        .eventDetailActions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* ── SECTION HEADER ── */
+        .sectionHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .sectionHeader h2 {
+            font-size: 1.1rem;
+        }
+
+        /* ── BUTTONS ── */
+        .btnPrimary {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.875rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            background: var(--accent);
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btnPrimary:hover { opacity: 0.88; }
+
+        .btnSecondary {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.875rem;
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            background: white;
+            color: var(--text);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btnSecondary:hover { background: var(--bg); }
+
+        /* ── TABLE ── */
+        .tableWrapper {
+            background: var(--surface);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: var(--bg);
+        }
+
+        th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 0.0625rem solid var(--border);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            border-bottom: 0.0625rem solid var(--border);
+        }
+
+        tr:last-child td { border-bottom: none; }
+
+        tr:hover td { background: var(--bg); }
+
+        /* ── ATTENDANCE BADGE ── */
+        .badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 2rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-present { background: var(--accent-light); color: var(--accent); }
+        .badge-absent  { background: var(--danger-light); color: var(--danger); }
+        .badge-late    { background: #fff3cd; color: #856404; }
+        .badge-pending { background: #f0f0f0; color: var(--muted); }
+
+        /* ── ATTENDANCE BUTTONS ── */
+        .attendanceActions {
+            display: flex;
+            gap: 0.3rem;
+        }
+
+        .btnAttend {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            border-radius: 0.375rem;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btnPresent { background: var(--accent-light); color: var(--accent); }
+        .btnAbsent  { background: var(--danger-light); color: var(--danger); }
+        .btnLate    { background: #fff3cd; color: #856404; }
+
+        .btnAttend:hover { opacity: 0.8; }
+
+        /* ── EMPTY STATE ── */
+        .emptyState {
+            text-align: center;
+            padding: 3rem;
+            color: var(--muted);
+        }
+
+        .footer {
+            height: 3rem;
+            border-top: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+    </style>
+    <script>
+    function filterTable() {
+        const input = document.getElementById("searchInput").value.toLowerCase();
+        const rows = document.querySelectorAll("tbody tr");
+        rows.forEach(row => {
+            const name = row.cells[1].textContent.toLowerCase();
+            row.style.display = name.includes(input) ? "" : "none";
+        });
+    }
+</script>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>ERMS</h2>
+        <a href="/dashboard">← Back to Dashboard</a>
+    </div>
+
+    <div class="main">
+
+        <!-- EVENT DETAILS -->
+        <div class="eventDetails">
+            <div>
+                <h1 th:text="${event.eventName}">Event Name</h1>
+                <div class="eventMeta">
+                    <div class="metaItem">
+                        <span class="metaLabel">Date</span>
+                        <span class="metaValue" th:text="${event.eventDate}">Jan 1, 2025</span>
+                    </div>
+                    <div class="metaItem">
+                        <span class="metaLabel">Location</span>
+                        <span class="metaValue" th:text="${event.location}">Location</span>
+                    </div>
+                    <div class="metaItem">
+                        <span class="metaLabel">Max Slots</span>
+                        <span class="metaValue" th:text="${event.maxSlots}">100</span>
+                    </div>
+                    <div class="metaItem">
+                        <span class="metaLabel">Available</span>
+                        <span class="metaValue slotsValue" 
+                            th:text="${event.maxSlots - event.currentSlots} + ' slots left'">
+                            100 slots left</span>
+                    </div>
+                </div>
+            </div>
+            <div class="eventDetailActions">
+                <a class="btnSecondary" th:href="@{/events/edit/{id}(id=${event.eventId})}">Edit Event</a>
+                <a class="btnPrimary" th:href="@{/registrations/new/{id}(id=${event.eventId})}">+ Register Attendee</a>
+            </div>
+        </div>
+
+        <!-- REGISTRATIONS TABLE -->
+        <div class="sectionHeader">
+            <h2>Registrants (<span th:text="${registrations.size()}">0</span>)</h2>
+            <!-- search bar function using jscript -->
+            <input type="text" id="searchInput" placeholder="Search name" 
+            oninput="filterTable()"
+            style="padding: 0.5rem 1rem; border: 0.0625rem solid var(--border); 
+                  border-radius: var(--radius); font-size: 0.875rem; 
+                  background: var(--surface); outline: none; width: 15rem;">
+            
+        </div>
+
+        <div class="tableWrapper">
+            <div class="emptyState" th:if="${registrations.isEmpty()}">
+                No registrants yet. Click '+ Register Attendee' to add one.
+            </div>
+
+            <table th:if="${!registrations.isEmpty()}">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Contact</th>
+                        <th>Registered</th>
+                        <th>Attendance</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="reg, i : ${registrations}">
+                        <td th:text="${i.count}">1</td>
+                        <td th:text="${reg.fullName}">Name</td>
+                        <td th:text="${reg.email}">email@email.com</td>
+                        <td th:text="${reg.contactNumber}">09123456789</td>
+                        <td th:text="${reg.registrationDate}">Jan 1, 2025</td>
+                        <td>
+                            <span class="badge"
+                                th:classappend="${reg.attendanceStatus == 'Present'} ? 'badge-present' : 
+                                               (${reg.attendanceStatus == 'Absent'} ? 'badge-absent' : 
+                                               (${reg.attendanceStatus == 'Late'} ? 'badge-late' : 'badge-pending'))"
+                                th:text="${reg.attendanceStatus}">Pending</span>
+                        </td>
+                        <td>
+                            <div class="attendanceActions">
+                                <a class="btnAttend btnPresent" 
+                                    th:href="@{/registrations/attend/{id}/Present(id=${reg.registrationId})}">Present</a>
+                                <a class="btnAttend btnAbsent"  
+                                    th:href="@{/registrations/attend/{id}/Absent(id=${reg.registrationId})}">Absent</a>
+                                <a class="btnAttend btnLate"    
+                                    th:href="@{/registrations/attend/{id}/Late(id=${reg.registrationId})}">Late</a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        Weldo Fanclub &mdash; Event Registration &amp; Management System
+    </div>
+
+</body>
+</html>

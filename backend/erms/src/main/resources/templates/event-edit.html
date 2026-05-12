@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERMS | Edit Event</title>
+    <style>
+        :root {
+            --bg: #f5f4f0;
+            --surface: #ffffff;
+            --border: #e2e0d8;
+            --text: #1a1a18;
+            --muted: #8a8880;
+            --accent: #2d5a3d;
+            --accent-hover: #224d32;
+            --radius: 0.75rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+            color: var(--text);
+            font-family: sans-serif;
+        }
+
+        .navbar {
+            height: 3.5rem;
+            background: var(--surface);
+            border-bottom: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+        }
+
+        .navbar h2 { font-size: 1rem; color: var(--accent); }
+        .navbar a { font-size: 0.875rem; color: var(--muted); text-decoration: none; }
+        .navbar a:hover { color: var(--text); }
+
+        .mainBody {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .mainFrame {
+            background: var(--surface);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            width: 100%;
+            max-width: 32rem;
+        }
+
+        .mainFrame h1 { font-size: 1.5rem; margin-bottom: 1.5rem; }
+
+        .formGroup {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .formGroup label { font-size: 0.875rem; color: var(--muted); }
+
+        .formGroup input,
+        .formGroup textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            outline: none;
+            border-radius: var(--radius);
+            border: 0.0625rem solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+            font-family: sans-serif;
+        }
+
+        .formGroup input:focus,
+        .formGroup textarea:focus { border-color: var(--accent); }
+
+        .formGroup textarea { resize: vertical; min-height: 5rem; }
+
+        .formActions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+
+        .btnSubmit {
+            flex: 1;
+            padding: 0.67rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            background: var(--accent);
+            color: white;
+        }
+
+        .btnSubmit:hover { background: var(--accent-hover); }
+
+        .btnCancel {
+            flex: 1;
+            padding: 0.67rem;
+            font-size: 1rem;
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            background: white;
+            color: var(--text);
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+
+        .btnCancel:hover { background: var(--bg); }
+
+        .footer {
+            height: 3rem;
+            border-top: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>ERMS</h2>
+        <a th:href="@{/events/{id}(id=${event.eventId})}">← Back to Event</a>
+    </div>
+
+    <div class="mainBody">
+        <div class="mainFrame">
+            <h1>Edit Event</h1>
+            <form th:action="@{/events/edit/{id}(id=${event.eventId})}" method="post">
+                <div class="formGroup">
+                    <label>Event Name</label>
+                    <input type="text" name="eventName" th:value="${event.eventName}" required>
+                </div>
+                <div class="formGroup">
+                    <label>Description</label>
+                    <textarea name="description" th:text="${event.description}"></textarea>
+                </div>
+                <div class="formGroup">
+                    <label>Event Date</label>
+                    <input type="date" name="eventDate" th:value="${event.eventDate}" required>
+                </div>
+                <div class="formGroup">
+                    <label>Location</label>
+                    <input type="text" name="location" th:value="${event.location}" required>
+                </div>
+                <div class="formGroup">
+                    <label>Max Slots</label>
+                    <input type="number" name="maxSlots" th:value="${event.maxSlots}" required>
+                </div>
+                <div class="formActions">
+                    <button type="submit" class="btnSubmit">Save Changes</button>
+                    <a th:href="@{/events/{id}(id=${event.eventId})}" class="btnCancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        Weldo Fanclub &mdash; Event Registration &amp; Management System
+    </div>
+
+</body>
+</html>

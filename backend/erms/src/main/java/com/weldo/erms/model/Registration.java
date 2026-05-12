@@ -63,4 +63,25 @@ public class Registration {
     public String getAttendanceStatus() { 
         return attendanceStatus; 
     }
+
+    //setters para sa event registration
+    public void setEventId(int eventId) {
+         this.eventId = eventId; 
+    }
+    public void setFirstName(String firstName) {
+         this.firstName = firstName; 
+    }
+    public void setLastName(String lastName) {
+         this.lastName = lastName; 
+    }
+    public void setEmail(String email) {
+         this.email = email; 
+    }
+    public void setContactNumber(String contactNumber) {
+         this.contactNumber = contactNumber; 
+    }
+
+    public void setAttendanceStatus(String attendanceStatus) {
+         this.attendanceStatus = attendanceStatus; 
+    }
 }

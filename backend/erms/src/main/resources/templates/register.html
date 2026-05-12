@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERMS | Register Attendee</title>
+    <style>
+        :root {
+            --bg: #f5f4f0;
+            --surface: #ffffff;
+            --border: #e2e0d8;
+            --text: #1a1a18;
+            --muted: #8a8880;
+            --accent: #2d5a3d;
+            --accent-hover: #224d32;
+            --danger: #c0392b;
+            --danger-light: #fdf0ee;
+            --radius: 0.75rem;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+            color: var(--text);
+            font-family: sans-serif;
+        }
+
+        .navbar {
+            height: 3.5rem;
+            background: var(--surface);
+            border-bottom: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+        }
+
+        .navbar h2 { font-size: 1rem; color: var(--accent); }
+        .navbar a { font-size: 0.875rem; color: var(--muted); text-decoration: none; }
+        .navbar a:hover { color: var(--text); }
+
+        .mainBody {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            padding: 2rem;
+        }
+
+        .mainFrame {
+            background: var(--surface);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            padding: 2rem;
+            width: 100%;
+            max-width: 32rem;
+        }
+
+        .mainFrame h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+
+        .eventTag {
+            font-size: 0.875rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .eventTag span {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .slotsInfo {
+            background: var(--bg);
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        .slotsInfo span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .formGroup {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .formGroup label { font-size: 0.875rem; color: var(--muted); }
+
+        .formGroup input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            outline: none;
+            border-radius: var(--radius);
+            border: 0.0625rem solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 0.9rem;
+        }
+
+        .formGroup input:focus { border-color: var(--accent); }
+
+        .errorMsg {
+            background: var(--danger-light);
+            color: var(--danger);
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .formActions { display: flex; gap: 0.75rem; margin-top: 1.5rem; }
+
+        .btnSubmit {
+            flex: 1;
+            padding: 0.67rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            background: var(--accent);
+            color: white;
+        }
+
+        .btnSubmit:hover { background: var(--accent-hover); }
+
+        .btnCancel {
+            flex: 1;
+            padding: 0.67rem;
+            font-size: 1rem;
+            border: 0.0625rem solid var(--border);
+            border-radius: var(--radius);
+            cursor: pointer;
+            background: white;
+            color: var(--text);
+            text-decoration: none;
+            text-align: center;
+            display: block;
+        }
+
+        .btnCancel:hover { background: var(--bg); }
+
+        .footer {
+            height: 3rem;
+            border-top: 0.0625rem solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h2>ERMS</h2>
+        <a th:href="@{/events/{id}(id=${event.eventId})}">← Back to Event</a>
+    </div>
+
+    <div class="mainBody">
+        <div class="mainFrame">
+            <h1>Register Attendee</h1>
+            <p class="eventTag">Event: <span th:text="${event.eventName}">Event Name</span></p>
+
+            <div class="slotsInfo">
+                Available slots: <span th:text="${event.maxSlots - event.currentSlots}">0</span>
+                out of <span th:text="${event.maxSlots}">0</span>
+            </div>
+
+            <!-- error message if event is full -->
+            <div class="errorMsg" th:if="${error}" th:text="${error}"></div>
+
+            <form th:action="@{/registrations/new/{id}(id=${event.eventId})}" method="post">
+                <div class="formGroup">
+                    <label>First Name</label>
+                    <input type="text" name="firstName" placeholder="e.g. Denise" required>
+                </div>
+                <div class="formGroup">
+                    <label>Last Name</label>
+                    <input type="text" name="lastName" placeholder="e.g. Hazel" required>
+                </div>
+                <div class="formGroup">
+                    <label>Email</label>
+                    <input type="email" name="email" placeholder="e.g. 2025.....@gordoncollege.edu.ph" required>
+                </div>
+                <div class="formGroup">
+                    <label>Contact Number</label>
+                    <input type="text" name="contactNumber" placeholder="e.g. 09603993847(gcash koto)" required>
+                </div>
+                <div class="formActions">
+                    <button type="submit" class="btnSubmit">Register</button>
+                    <a th:href="@{/events/{id}(id=${event.eventId})}" class="btnCancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="footer">
+        Weldo Fanclub &mdash; Event Registration &amp; Management System
+    </div>
+
+</body>
+</html>
